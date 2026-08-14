@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>Italiano — Impara l'italiano</title>
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#2B2119" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%232B2119'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23E3A72E' font-family='Georgia'%3EI%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#FBF6EC; --surface:#FFFFFF; --ink:#2B2119; --ink-soft:#7A6C5D;
+  --terracotta:#C1440E; --olive:#3E5A4E; --ochre:#E3A72E; --line:#E7DCC8; --wrong:#B8453A;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:#EDE6D8;
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+}
+.app-shell{width:100%; display:flex; align-items:center; justify-content:center;}
+.phone{
+  width:390px; max-width:100%; height:780px; max-height:92vh;
+  background:var(--ink); border-radius:46px; padding:12px;
+  box-shadow:0 30px 60px -20px rgba(43,33,25,0.5);
+  position:relative;
+}
+.notch{position:absolute; top:12px; left:50%; transform:translateX(-50%); width:120px; height:24px; background:var(--ink); border-radius:14px; z-index:5;}
+.screen{width:100%; height:100%; background:var(--bg); border-radius:36px; overflow:hidden; display:flex; flex-direction:column; position:relative;}
+.content{flex:1; overflow-y:auto; display:flex; flex-direction:column;}
+.pad{padding:28px 20px 16px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--terracotta); font-weight:600;}
+h1.title{font-family:'Fraunces',serif; font-size:30px; font-weight:600; color:var(--ink); margin:4px 0 0;}
+.mono{font-family:'IBM Plex Mono',monospace; color:var(--ink); font-weight:500;}
+.row-between{display:flex; justify-content:space-between; align-items:flex-start;}
+.streak-badge{display:flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:6px 12px;}
+.progress-card{background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:14px 16px; margin-top:20px;}
+.track-bg{margin-top:10px; height:6px; border-radius:4px; background:var(--line); overflow:hidden;}
+.track-fill{height:100%; background:linear-gradient(90deg,var(--terracotta),var(--ochre)); border-radius:4px; transition:width .4s ease;}
+.lesson-hero{margin-top:12px; width:100%; display:flex; align-items:center; gap:14px; background:var(--ink); border-radius:20px; padding:16px; border:none; cursor:pointer; text-align:left;}
+.city-stamp-sm{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; color:var(--bg); border:1px solid var(--ochre); border-radius:999px; padding:6px 10px; text-transform:uppercase; flex-shrink:0;}
+.lesson-hero-title{font-family:'Fraunces',serif; font-size:19px; color:#fff; font-weight:600;}
+.lesson-hero-sub{font-size:12.5px; color:#C9BFAE; margin-top:2px;}
+.arrow{color:var(--ochre); font-size:18px;}
+.tip-row{display:flex; flex-direction:column; gap:10px; margin-top:10px;}
+.tip-card{display:flex; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:12px 14px;}
+.tip-n{font-family:'IBM Plex Mono',monospace; color:var(--olive); font-weight:600; font-size:12px;}
+.tip-text{font-size:13.5px; color:var(--ink-soft); line-height:1.4;}
+.lesson-list{margin-top:18px; display:flex; flex-direction:column; gap:10px;}
+.lesson-row{display:flex; align-items:center; gap:14px; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:12px 14px; cursor:pointer; width:100%; text-align:left;}
+.lesson-row-num{width:34px; height:34px; border-radius:50%; background:var(--bg); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink-soft); flex-shrink:0;}
+.lesson-row-num.done{background:var(--olive); color:#fff; border-color:var(--olive);}
+.lesson-row-title{font-family:'Fraunces',serif; font-size:16.5px; color:var(--ink); font-weight:600;}
+.lesson-row-sub{font-size:12px; color:var(--ink-soft); margin-top:1px;}
+.lesson-row-week{font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--terracotta); flex-shrink:0;}
+.lesson-topbar{display:flex; align-items:center; justify-content:space-between; padding:22px 16px 6px;}
+.exit-btn{width:30px; height:30px; border-radius:50%; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); cursor:pointer; font-size:13px;}
+.lesson-topbar-title{font-family:'Fraunces',serif; font-weight:600; font-size:15px; color:var(--ink);}
+.dots{display:flex; gap:5px; padding:10px 20px 0;}
+.dot{flex:1; height:4px; border-radius:3px; background:var(--line);}
+.dot.active{background:var(--terracotta);}
+.flash-wrap{padding:26px 20px 10px; cursor:pointer;}
+.flash-card{position:relative; background:var(--ink); border-radius:24px; min-height:220px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:24px; text-align:center;}
+.flash-card.back{background:var(--olive);}
+.flash-label{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.14em; color:var(--ochre);}
+.flash-word{font-family:'Fraunces',serif; font-size:27px; color:#fff; font-weight:600; line-height:1.25;}
+.flash-hint{font-size:11.5px; color:#C9BFAE;}
+.speak-btn{position:absolute; top:14px; right:14px; width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.12); color:#fff; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .15s ease;}
+.speak-btn:active{transform:scale(0.9);}
+.speak-btn.on-light{position:static; width:32px; height:32px; border:1px solid var(--line); background:var(--surface); color:var(--terracotta); flex-shrink:0;}
+.primary-btn{margin:10px 20px 20px; background:var(--terracotta); color:#fff; border:none; border-radius:14px; padding:15px 0; font-size:15px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; width:calc(100% - 40px);}
+.quiz-q-row{display:flex; align-items:center; gap:10px; margin:6px 20px 16px;}
+.quiz-q{font-family:'Fraunces',serif; font-size:22px; color:var(--ink); font-weight:600; flex:1;}
+.quiz-opts{display:flex; flex-direction:column; gap:10px; padding:0 20px;}
+.quiz-opt{text-align:left; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; font-size:14.5px; color:var(--ink); cursor:pointer; font-family:'Inter',sans-serif; width:100%;}
+.quiz-opt.correct{background:#E7F0EA; border-color:var(--olive); color:var(--olive);}
+.quiz-opt.wrong{background:#F6E4E1; border-color:var(--wrong); color:var(--wrong);}
+.done-wrap{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:28px 20px;}
+.stamp-big{width:110px; height:110px; border-radius:50%; border:3px solid var(--terracotta); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:700; font-size:15px; color:var(--terracotta); transform:rotate(-6deg); text-align:center; padding:10px;}
+.stamp-grid{margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.stamp-slot{aspect-ratio:1; border-radius:18px; border:2px dashed var(--olive); background:#EEF3EF; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; transform:rotate(-2deg);}
+.stamp-slot.empty{border:2px dashed var(--line); background:transparent; transform:none;}
+.stamp-city{font-family:'Fraunces',serif; font-weight:700; color:var(--olive); font-size:14px;}
+.stamp-check{color:var(--olive); font-size:15px;}
+.stamp-locked{color:var(--line); font-family:'IBM Plex Mono',monospace; font-size:20px;}
+.empty-state{margin-top:24px; font-size:13.5px; color:var(--ink-soft); background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px; line-height:1.5;}
+.pill-row{display:flex; gap:10px; padding:0 20px 20px;}
+.pill-btn{flex:1; padding:14px 0; border-radius:14px; font-weight:600; font-size:14px; cursor:pointer; font-family:'Inter',sans-serif;}
+.pill-wrong{border:1px solid var(--wrong); background:#F6E4E1; color:var(--wrong);}
+.pill-right{border:1px solid var(--olive); background:#E7F0EA; color:var(--olive);}
+.bottom-nav{display:flex; border-top:1px solid var(--line); background:var(--surface); padding:8px 4px 14px;}
+.nav-btn{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; color:var(--ink-soft); padding:6px 0; font-family:'Inter',sans-serif;}
+.nav-btn.active{color:var(--terracotta);}
+.nav-icon{font-size:17px;}
+.nav-label{font-size:10px; font-family:'IBM Plex Mono',monospace;}
+.install-hint{max-width:390px; margin-top:14px; text-align:center; font-size:12px; color:var(--ink-soft); font-family:'Inter',sans-serif;}
+::-webkit-scrollbar{width:0;}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen" id="screen"></div>
+  </div>
+</div>
+
+<script>
+/* ============ DÁTA ============ */
+const LESSONS = [
+  { id:"l1", city:"Roma", week:1, title:"Saluti", subtitle:"Pozdravy",
+    vocab:[["Ciao","Ahoj / Čau"],["Buongiorno","Dobré ráno / Dobrý deň"],["Buonasera","Dobrý večer"],["Buonanotte","Dobrú noc"],["Arrivederci","Dovidenia"],["Come stai?","Ako sa máš?"],["Sto bene, grazie","Mám sa dobre, ďakujem"],["Piacere","Teší ma"]],
+    quiz:[{q:"Ciao",opts:["Ahoj","Ďakujem","Prosím","Zbohom"],a:0},{q:"Ako sa povie 'Dobrý večer'?",opts:["Buongiorno","Buonanotte","Buonasera","Ciao"],a:2},{q:"Sto bene, grazie",opts:["Nemám sa dobre","Mám sa dobre, ďakujem","Kde si?","Teší ma"],a:1},{q:"Piacere",opts:["Prosím","Prepáč","Teší ma","Ahoj"],a:2}]},
+  { id:"l2", city:"Torino", week:1, title:"Numeri e giorni", subtitle:"Čísla a dni",
+    vocab:[["Uno, due, tre","Jeden, dva, tri"],["Quattro, cinque, sei","Štyri, päť, šesť"],["Sette, otto, nove, dieci","Sedem, osem, deväť, desať"],["Lunedì","Pondelok"],["Mercoledì","Streda"],["Venerdì","Piatok"],["Sabato","Sobota"],["Domenica","Nedeľa"]],
+    quiz:[{q:"Cinque",opts:["Tri","Päť","Sedem","Desať"],a:1},{q:"Ako sa povie 'pondelok'?",opts:["Domenica","Sabato","Lunedì","Venerdì"],a:2},{q:"Domenica",opts:["Streda","Piatok","Nedeľa","Pondelok"],a:2},{q:"Otto",opts:["Šesť","Osem","Deväť","Dva"],a:1}]},
+  { id:"l3", city:"Genova", week:2, title:"Essere e avere", subtitle:"Byť a mať",
+    vocab:[["Io sono","Ja som"],["Tu sei","Ty si"],["Lui / Lei è","On / Ona je"],["Noi siamo","My sme"],["Voi siete","Vy ste"],["Loro sono","Oni sú"],["Io ho","Ja mám"],["Tu hai","Ty máš"]],
+    quiz:[{q:"Io ___ italiano. (essere)",opts:["sei","sono","è","siamo"],a:1},{q:"Tu ___ ragione. (avere)",opts:["ho","hai","ha","hanno"],a:1},{q:"Noi ___ studenti.",opts:["siamo","sono","sei","siete"],a:0},{q:"Lei ___ un libro.",opts:["ha","hai","ho","hanno"],a:0}]},
+  { id:"l4", city:"Firenze", week:2, title:"La famiglia", subtitle:"Rodina",
+    vocab:[["Madre","Matka"],["Padre","Otec"],["Fratello","Brat"],["Sorella","Sestra"],["Figlio / Figlia","Syn / Dcéra"],["Nonno / Nonna","Starý otec / Stará mama"],["Marito","Manžel"],["Moglie","Manželka"]],
+    quiz:[{q:"Sorella",opts:["Brat","Sestra","Matka","Dcéra"],a:1},{q:"Ako sa povie 'starý otec'?",opts:["Nonna","Padre","Nonno","Fratello"],a:2},{q:"Moglie",opts:["Manžel","Manželka","Syn","Matka"],a:1},{q:"Figlio",opts:["Syn","Dcéra","Brat","Otec"],a:0}]},
+  { id:"l5", city:"Bologna", week:3, title:"Il cibo", subtitle:"Jedlo",
+    vocab:[["Pane","Chlieb"],["Acqua","Voda"],["Vino","Víno"],["Pasta","Cestoviny"],["Formaggio","Syr"],["Caffè","Káva"],["Gelato","Zmrzlina"],["Il conto, per favore","Účet, prosím"]],
+    quiz:[{q:"Formaggio",opts:["Chlieb","Syr","Víno","Voda"],a:1},{q:"Ako sa povie 'zmrzlina'?",opts:["Gelato","Caffè","Pasta","Pane"],a:0},{q:"Il conto, per favore",opts:["Dobrú chuť","Účet, prosím","Som plný","Chutí mi to"],a:1},{q:"Acqua",opts:["Víno","Chlieb","Voda","Káva"],a:2}]},
+  { id:"l6", city:"Venezia", week:3, title:"In città", subtitle:"V meste",
+    vocab:[["La strada","Ulica"],["La piazza","Námestie"],["Il negozio","Obchod"],["La stazione","Stanica"],["La chiesa","Kostol"],["Il mercato","Trh"],["La banca","Banka"],["Dov'è...?","Kde je...?"]],
+    quiz:[{q:"La piazza",opts:["Ulica","Námestie","Stanica","Kostol"],a:1},{q:"Ako sa opýtaš 'Kde je...?'",opts:["Che cos'è?","Dov'è...?","Chi è?","Come si va?"],a:1},{q:"La stazione",opts:["Stanica","Banka","Trh","Obchod"],a:0},{q:"Il negozio",opts:["Kostol","Obchod","Ulica","Trh"],a:1}]},
+  { id:"l7", city:"Napoli", week:4, title:"Colori e aggettivi", subtitle:"Farby a prídavné mená",
+    vocab:[["Rosso","Červený"],["Blu","Modrý"],["Verde","Zelený"],["Giallo","Žltý"],["Grande","Veľký"],["Piccolo","Malý"],["Bello","Krásny"],["Buono","Dobrý"]],
+    quiz:[{q:"Verde",opts:["Modrý","Zelený","Žltý","Červený"],a:1},{q:"Ako sa povie 'malý'?",opts:["Grande","Piccolo","Bello","Buono"],a:1},{q:"Bello",opts:["Dobrý","Škaredý","Krásny","Veľký"],a:2},{q:"Rosso",opts:["Žltý","Modrý","Zelený","Červený"],a:3}]},
+  { id:"l8", city:"Palermo", week:4, title:"Il passato", subtitle:"Minulý čas",
+    vocab:[["Ho mangiato","Jedol/a som"],["Ho bevuto","Pil/a som"],["Sono andato/a","Šiel/šla som"],["Ho visto","Videl/a som"],["Ho fatto","Urobil/a som"],["Ho detto","Povedal/a som"]],
+    quiz:[{q:"Ho mangiato",opts:["Budem jesť","Jedol/a som","Jem","Chcem jesť"],a:1},{q:"Ako sa povie 'videl/a som'?",opts:["Ho visto","Ho fatto","Ho detto","Sono andato"],a:0},{q:"Sono andato/a",opts:["Prišiel/prišla som","Šiel/šla som","Bežím","Pôjdem"],a:1},{q:"Ho detto",opts:["Povedal/a som","Počul/a som","Videl/a som","Dal/a som"],a:0}]},
+  { id:"l9", city:"Milano", week:5, title:"Il futuro", subtitle:"Budúci čas",
+    vocab:[["Andrò","Pôjdem"],["Farò","Urobím"],["Mangerò","Budem jesť"],["Vedrò","Uvidím"],["Sarò","Budem"],["Avrò","Budem mať"]],
+    quiz:[{q:"Andrò",opts:["Šiel som","Idem","Pôjdem","Chodím"],a:2},{q:"Ako sa povie 'budem mať'?",opts:["Sarò","Avrò","Farò","Vedrò"],a:1},{q:"Mangerò",opts:["Budem jesť","Jedol som","Jem","Chcem jesť"],a:0},{q:"Sarò",opts:["Budem mať","Uvidím","Budem","Urobím"],a:2}]},
+  { id:"l10", city:"Verona", week:6, title:"Conversazione", subtitle:"Konverzácia",
+    vocab:[["Come ti chiami?","Ako sa voláš?"],["Mi chiamo...","Volám sa..."],["Di dove sei?","Odkiaľ si?"],["Sono della Slovacchia","Som zo Slovenska"],["Quanti anni hai?","Koľko máš rokov?"],["Mi piace...","Páči sa mi..."],["Che lavoro fai?","Akú prácu robíš?"],["Non capisco","Nerozumiem"]],
+    quiz:[{q:"Come ti chiami?",opts:["Koľko máš rokov?","Ako sa voláš?","Odkiaľ si?","Ako sa máš?"],a:1},{q:"Ako sa povie 'nerozumiem'?",opts:["Non capisco","Non lo so","Non parlo","Non vedo"],a:0},{q:"Mi piace...",opts:["Volám sa...","Chcem...","Páči sa mi...","Poznám..."],a:2},{q:"Di dove sei?",opts:["Kam ideš?","Odkiaľ si?","Kde bývaš?","Kto si?"],a:1}]},
+];
+const TOTAL = LESSONS.length;
+const STORAGE_KEY = "italiano-progress-v1";
+
+/* ============ VÝSLOVNOSŤ ============ */
+let cachedItalianVoice = null;
+function primeVoices(){
+  if(!window.speechSynthesis) return;
+  const pick = () => {
+    const voices = window.speechSynthesis.getVoices();
+    cachedItalianVoice = voices.find(v=>v.lang && v.lang.toLowerCase()==="it-it") ||
+                          voices.find(v=>v.lang && v.lang.toLowerCase().startsWith("it")) || null;
+  };
+  pick();
+  window.speechSynthesis.onvoiceschanged = pick;
+}
+function speakItalian(text){
+  try{
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang="it-IT"; u.rate=0.85; u.pitch=1;
+    if(cachedItalianVoice) u.voice = cachedItalianVoice;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ============ STAV ============ */
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return { completed:{}, streak:1, known:{} };
+}
+function saveProgress(p){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch(e){}
+}
+let state = {
+  tab:"home",
+  progress: loadProgress(),
+  activeLesson: null,
+  lessonPhase:"cards", cardIdx:0, flipped:false,
+  quizIdx:0, quizSelected:null, quizCorrect:0,
+  praticaOrder:null, praticaPos:0, praticaFlipped:false,
+};
+
+function esc(s){ const d=document.createElement("div"); d.innerText=s; return d.innerHTML; }
+
+/* ============ RENDER ============ */
+function render(){
+  const screen = document.getElementById("screen");
+  if(state.activeLesson){
+    screen.innerHTML = renderLesson();
+  } else {
+    screen.innerHTML = `<div class="content" id="content">${renderTab()}</div>${renderNav()}`;
+  }
+  attachHandlers();
+}
+
+function renderNav(){
+  const items=[["home","⌂","Home"],["lezioni","▤","Lezioni"],["pratica","◐","Pratica"],["passaporto","▣","Passaporto"]];
+  return `<div class="bottom-nav">${items.map(([id,icon,label])=>`
+    <button class="nav-btn ${state.tab===id?'active':''}" data-nav="${id}">
+      <div class="nav-icon">${icon}</div><div class="nav-label">${label}</div>
+    </button>`).join("")}</div>`;
+}
+
+function renderTab(){
+  if(state.tab==="home") return renderHome();
+  if(state.tab==="lezioni") return renderLezioni();
+  if(state.tab==="pratica") return renderPratica();
+  if(state.tab==="passaporto") return renderPassaporto();
+  return "";
+}
+
+function renderHome(){
+  const completedCount = Object.keys(state.progress.completed).length;
+  const pct = Math.round((completedCount/TOTAL)*100);
+  const next = LESSONS.find(l=>!state.progress.completed[l.id]) || LESSONS[LESSONS.length-1];
+  return `
+  <div class="pad">
+    <div class="row-between">
+      <div><div class="eyebrow">Il tuo viaggio</div><h1 class="title">Buongiorno</h1></div>
+      <div class="streak-badge">🔥<span class="mono" style="font-size:15px">${state.progress.streak}</span></div>
+    </div>
+    <div class="progress-card">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="mono">${completedCount}/${TOTAL} lezioni</span>
+        <span class="mono" style="color:var(--terracotta)">${pct}%</span>
+      </div>
+      <div class="track-bg"><div class="track-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="eyebrow" style="margin-top:18px">Prossima tappa</div>
+    <button class="lesson-hero" data-open-lesson="${next.id}">
+      <div class="city-stamp-sm">${next.city}</div>
+      <div style="flex:1;text-align:left">
+        <div class="lesson-hero-title">${next.title}</div>
+        <div class="lesson-hero-sub">${next.subtitle}</div>
+      </div>
+      <div class="arrow">→</div>
+    </button>
+    <div class="eyebrow" style="margin-top:22px">Perché funziona</div>
+    <div class="tip-row">
+      <div class="tip-card"><div class="tip-n">01</div><div class="tip-text">15 minúť denne stačí — krátke lekcie, opakovanie kartičiek.</div></div>
+      <div class="tip-card"><div class="tip-n">02</div><div class="tip-text">Každá dokončená lekcia = pečiatka do pasu. Zbieraj mestá.</div></div>
+    </div>
+  </div>`;
+}
+
+function renderLezioni(){
+  return `
+  <div class="pad">
+    <div class="eyebrow">Percorso completo</div>
+    <h1 class="title">Lezioni</h1>
+    <div class="lesson-list">
+      ${LESSONS.map((l,i)=>{
+        const done = !!state.progress.completed[l.id];
+        return `<button class="lesson-row" data-open-lesson="${l.id}">
+          <div class="lesson-row-num ${done?'done':''}">${done?'✓':i+1}</div>
+          <div style="flex:1;text-align:left">
+            <div class="lesson-row-title">${l.title}</div>
+            <div class="lesson-row-sub">${l.subtitle} · ${l.city}</div>
+          </div>
+          <div class="lesson-row-week">SETT. ${l.week}</div>
+        </button>`;
+      }).join("")}
+    </div>
+  </div>`;
+}
+
+function renderPratica(){
+  const allWords = LESSONS.filter(l=>state.progress.completed[l.id]).flatMap(l=>l.vocab);
+  if(!allWords.length){
+    return `<div class="pad">
+      <div class="eyebrow">Ripasso</div><h1 class="title">Pratica</h1>
+      <div class="empty-state">Dokonči aspoň jednu lekciu, aby si tu mal slovíčka na precvičovanie.</div>
+    </div>`;
+  }
+  if(!state.praticaOrder){
+    state.praticaOrder = [...allWords].sort(()=>Math.random()-0.5);
+    state.praticaPos = 0;
+  }
+  const word = state.praticaOrder[state.praticaPos % state.praticaOrder.length];
+  return `
+  <div class="pad" style="display:flex;flex-direction:column;height:100%">
+    <div class="eyebrow">Ripasso · ${allWords.length} slov</div>
+    <h1 class="title">Pratica</h1>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <div class="flash-wrap" data-flip-pratica="1">
+        <div class="flash-card ${state.praticaFlipped?'back':''}">
+          <button class="speak-btn" data-speak="${esc(word[0])}">🔊</button>
+          <div class="flash-label">${state.praticaFlipped?'SLOVENSKY':'ITALIANO'}</div>
+          <div class="flash-word">${esc(state.praticaFlipped?word[1]:word[0])}</div>
+          <div class="flash-hint">ťukni na kartu pre ${state.praticaFlipped?'taliančinu':'preklad'} · 🔊 pre výslovnosť</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pill-row">
+    <button class="pill-btn pill-wrong" data-pratica-mark="0">Neviem</button>
+    <button class="pill-btn pill-right" data-pratica-mark="1">Viem</button>
+  </div>`;
+}
+
+function renderPassaporto(){
+  const completedCount = Object.keys(state.progress.completed).length;
+  return `
+  <div class="pad">
+    <div class="eyebrow">${completedCount}/${TOTAL} pečiatok</div>
+    <h1 class="title">Passaporto</h1>
+    <div class="stamp-grid">
+      ${LESSONS.map(l=>{
+        const done = !!state.progress.completed[l.id];
+        return `<div class="stamp-slot ${done?'':'empty'}">
+          ${done ? `<div class="stamp-city">${l.city}</div><div class="stamp-check">✓</div>` : `<div class="stamp-locked">?</div>`}
+        </div>`;
+      }).join("")}
+    </div>
+    ${completedCount===TOTAL ? `<div class="empty-state">🎉 Hai completato tutto il percorso base. Complimenti!</div>` : ""}
+  </div>`;
+}
+
+function renderLesson(){
+  const lesson = state.activeLesson;
+  let inner = "";
+  if(state.lessonPhase==="cards"){
+    const v = lesson.vocab[state.cardIdx];
+    inner = `
+    <div class="content" style="justify-content:space-between">
+      <div>
+        <div class="dots">${lesson.vocab.map((_,i)=>`<div class="dot ${i<=state.cardIdx?'active':''}"></div>`).join("")}</div>
+        <div class="flash-wrap" data-flip-card="1">
+          <div class="flash-card ${state.flipped?'back':''}">
+            <button class="speak-btn" data-speak="${esc(v[0])}">🔊</button>
+            <div class="flash-label">${state.flipped?'SLOVENSKY':'ITALIANO'}</div>
+            <div class="flash-word">${esc(state.flipped?v[1]:v[0])}</div>
+            <div class="flash-hint">ťukni na kartu pre ${state.flipped?'taliančinu':'preklad'} · 🔊 pre výslovnosť</div>
+          </div>
+        </div>
+      </div>
+      <button class="primary-btn" data-next-card="1">${state.cardIdx<lesson.vocab.length-1?'Ďalšie slovo':'Prejsť na kvíz'}</button>
+    </div>`;
+  } else if(state.lessonPhase==="quiz"){
+    const q = lesson.quiz[state.quizIdx];
+    inner = `
+    <div class="content">
+      <div class="dots">${lesson.quiz.map((_,i)=>`<div class="dot ${i<=state.quizIdx?'active':''}"></div>`).join("")}</div>
+      <div class="eyebrow" style="margin:14px 20px 0">Ako sa povie po slovensky:</div>
+      <div class="quiz-q-row">
+        <div class="quiz-q">${esc(q.q)}</div>
+        <button class="speak-btn on-light" data-speak="${esc(q.q)}">🔊</button>
+      </div>
+      <div class="quiz-opts">
+        ${q.opts.map((opt,i)=>{
+          let cls="quiz-opt";
+          if(state.quizSelected!==null){
+            if(i===q.a) cls+=" correct";
+            else if(i===state.quizSelected) cls+=" wrong";
+          }
+          return `<button class="${cls}" data-quiz-opt="${i}">${esc(opt)}</button>`;
+        }).join("")}
+      </div>
+    </div>`;
+  } else {
+    inner = `
+    <div class="done-wrap">
+      <div class="stamp-big">${lesson.city}</div>
+      <h1 class="title" style="margin-top:18px">Lezione completata!</h1>
+      <div class="mono">${state.quizCorrect}/${lesson.quiz.length} správne</div>
+      <button class="primary-btn" style="margin-top:26px;width:100%" data-finish-lesson="1">Získať pečiatku</button>
+    </div>`;
+  }
+  return `
+  <div style="display:flex;flex-direction:column;height:100%">
+    <div class="lesson-topbar">
+      <button class="exit-btn" data-exit-lesson="1">✕</button>
+      <div class="lesson-topbar-title">${lesson.title}</div>
+      <div style="width:30px"></div>
+    </div>
+    ${inner}
+  </div>`;
+}
+
+/* ============ EVENTY ============ */
+function attachHandlers(){
+  document.querySelectorAll("[data-nav]").forEach(el=>{
+    el.onclick = ()=>{ state.tab = el.getAttribute("data-nav"); render(); };
+  });
+  document.querySelectorAll("[data-open-lesson]").forEach(el=>{
+    el.onclick = ()=>{
+      const id = el.getAttribute("data-open-lesson");
+      state.activeLesson = LESSONS.find(l=>l.id===id);
+      state.lessonPhase="cards"; state.cardIdx=0; state.flipped=false;
+      state.quizIdx=0; state.quizSelected=null; state.quizCorrect=0;
+      render();
+    };
+  });
+  const exitBtn = document.querySelector("[data-exit-lesson]");
+  if(exitBtn) exitBtn.onclick = ()=>{ state.activeLesson=null; render(); };
+
+  const flipCard = document.querySelector("[data-flip-card]");
+  if(flipCard) flipCard.onclick = ()=>{ state.flipped=!state.flipped; render(); };
+
+  const nextCard = document.querySelector("[data-next-card]");
+  if(nextCard) nextCard.onclick = ()=>{
+    const lesson = state.activeLesson;
+    if(state.cardIdx < lesson.vocab.length-1){ state.cardIdx++; state.flipped=false; }
+    else { state.lessonPhase="quiz"; }
+    render();
+  };
+
+  document.querySelectorAll("[data-quiz-opt]").forEach(el=>{
+    el.onclick = ()=>{
+      if(state.quizSelected!==null) return;
+      const i = parseInt(el.getAttribute("data-quiz-opt"),10);
+      const lesson = state.activeLesson;
+      const q = lesson.quiz[state.quizIdx];
+      state.quizSelected = i;
+      if(i===q.a) state.quizCorrect++;
+      render();
+      setTimeout(()=>{
+        if(state.quizIdx < lesson.quiz.length-1){ state.quizIdx++; state.quizSelected=null; }
+        else { state.lessonPhase="done"; }
+        render();
+      }, 700);
+    };
+  });
+
+  const finishBtn = document.querySelector("[data-finish-lesson]");
+  if(finishBtn) finishBtn.onclick = ()=>{
+    const lesson = state.activeLesson;
+    state.progress.completed[lesson.id] = { correctCount:state.quizCorrect, totalQ:lesson.quiz.length, at:Date.now() };
+    saveProgress(state.progress);
+    state.activeLesson = null;
+    state.tab = "passaporto";
+    render();
+  };
+
+  const flipPratica = document.querySelector("[data-flip-pratica]");
+  if(flipPratica) flipPratica.onclick = ()=>{ state.praticaFlipped=!state.praticaFlipped; render(); };
+
+  document.querySelectorAll("[data-pratica-mark]").forEach(el=>{
+    el.onclick = ()=>{
+      const known = el.getAttribute("data-pratica-mark")==="1";
+      const word = state.praticaOrder[state.praticaPos % state.praticaOrder.length];
+      state.progress.known[word[0]] = known;
+      saveProgress(state.progress);
+      state.praticaFlipped=false;
+      state.praticaPos++;
+      render();
+    };
+  });
+
+  document.querySelectorAll("[data-speak]").forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      speakItalian(el.getAttribute("data-speak"));
+      el.style.transform="scale(0.9)";
+      setTimeout(()=>{ el.style.transform="scale(1)"; }, 250);
+    };
+  });
+}
+
+primeVoices();
+render();
+</script>
+</body>
+</html>
