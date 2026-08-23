@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>Italiano — Impara l'italiano</title>
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#2B2119" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%232B2119'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23E3A72E' font-family='Georgia'%3EI%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#FBF6EC; --surface:#FFFFFF; --ink:#2B2119; --ink-soft:#7A6C5D;
+  --terracotta:#C1440E; --olive:#3E5A4E; --ochre:#E3A72E; --line:#E7DCC8; --wrong:#B8453A;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:#EDE6D8;
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+}
+.app-shell{width:100%; display:flex; align-items:center; justify-content:center;}
+.phone{
+  width:390px; max-width:100%; height:780px; max-height:92vh;
+  background:var(--ink); border-radius:46px; padding:12px;
+  box-shadow:0 30px 60px -20px rgba(43,33,25,0.5);
+  position:relative;
+}
+.notch{position:absolute; top:12px; left:50%; transform:translateX(-50%); width:120px; height:24px; background:var(--ink); border-radius:14px; z-index:5;}
+.screen{width:100%; height:100%; background:var(--bg); border-radius:36px; overflow:hidden; display:flex; flex-direction:column; position:relative;}
+.content{flex:1; overflow-y:auto; display:flex; flex-direction:column;}
+.pad{padding:28px 20px 16px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--terracotta); font-weight:600;}
+h1.title{font-family:'Fraunces',serif; font-size:30px; font-weight:600; color:var(--ink); margin:4px 0 0;}
+.mono{font-family:'IBM Plex Mono',monospace; color:var(--ink); font-weight:500;}
+.row-between{display:flex; justify-content:space-between; align-items:flex-start;}
+.streak-badge{display:flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:6px 12px;}
+.progress-card{background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:14px 16px; margin-top:20px;}
+.track-bg{margin-top:10px; height:6px; border-radius:4px; background:var(--line); overflow:hidden;}
+.track-fill{height:100%; background:linear-gradient(90deg,var(--terracotta),var(--ochre)); border-radius:4px; transition:width .4s ease;}
+.lesson-hero{margin-top:12px; width:100%; display:flex; align-items:center; gap:14px; background:var(--ink); border-radius:20px; padding:16px; border:none; cursor:pointer; text-align:left;}
+.city-stamp-sm{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; color:var(--bg); border:1px solid var(--ochre); border-radius:999px; padding:6px 10px; text-transform:uppercase; flex-shrink:0;}
+.lesson-hero-title{font-family:'Fraunces',serif; font-size:19px; color:#fff; font-weight:600;}
+.lesson-hero-sub{font-size:12.5px; color:#C9BFAE; margin-top:2px;}
+.arrow{color:var(--ochre); font-size:18px;}
+.tip-row{display:flex; flex-direction:column; gap:10px; margin-top:10px;}
+.tip-card{display:flex; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:12px 14px;}
+.tip-n{font-family:'IBM Plex Mono',monospace; color:var(--olive); font-weight:600; font-size:12px;}
+.tip-text{font-size:13.5px; color:var(--ink-soft); line-height:1.4;}
+.lesson-list{margin-top:18px; display:flex; flex-direction:column; gap:10px;}
+.lesson-row{display:flex; align-items:center; gap:14px; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:12px 14px; cursor:pointer; width:100%; text-align:left;}
+.lesson-row-num{width:34px; height:34px; border-radius:50%; background:var(--bg); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink-soft); flex-shrink:0;}
+.lesson-row-num.done{background:var(--olive); color:#fff; border-color:var(--olive);}
+.lesson-row-title{font-family:'Fraunces',serif; font-size:16.5px; color:var(--ink); font-weight:600;}
+.lesson-row-sub{font-size:12px; color:var(--ink-soft); margin-top:1px;}
+.lesson-row-week{font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--terracotta); flex-shrink:0;}
+.lesson-topbar{display:flex; align-items:center; justify-content:space-between; padding:22px 16px 6px;}
+.exit-btn{width:30px; height:30px; border-radius:50%; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); cursor:pointer; font-size:13px;}
+.lesson-topbar-title{font-family:'Fraunces',serif; font-weight:600; font-size:15px; color:var(--ink);}
+.dots{display:flex; gap:5px; padding:10px 20px 0;}
+.dot{flex:1; height:4px; border-radius:3px; background:var(--line);}
+.dot.active{background:var(--terracotta);}
+.flash-wrap{padding:26px 20px 10px;}
+.flash-card{position:relative; background:var(--ink); border-radius:24px; min-height:220px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:28px 24px; text-align:center;}
+.flash-card.back{background:var(--olive);}
+.flash-label{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.14em; color:var(--ochre);}
+.flash-word{font-family:'Fraunces',serif; font-size:26px; color:#fff; font-weight:600; line-height:1.25;}
+.flash-divider{width:36px; height:1px; background:rgba(255,255,255,0.25);}
+.flash-translation{font-family:'Inter',sans-serif; font-size:16px; color:#E7DFCF; font-weight:500; line-height:1.3;}
+.flash-hint{font-size:11.5px; color:#C9BFAE;}
+.speak-btn{position:absolute; top:14px; right:14px; width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.12); color:#fff; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .15s ease;}
+.speak-btn:active{transform:scale(0.9);}
+.speak-btn.on-light{position:static; width:32px; height:32px; border:1px solid var(--line); background:var(--surface); color:var(--terracotta); flex-shrink:0;}
+.mic-btn{position:absolute; top:14px; left:14px; width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.12); color:#fff; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .15s ease, background .2s ease;}
+.mic-btn:active{transform:scale(0.9);}
+.mic-btn.listening{background:var(--terracotta); border-color:var(--terracotta); animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(193,68,14,0.5);}70%{box-shadow:0 0 0 10px rgba(193,68,14,0);}100%{box-shadow:0 0 0 0 rgba(193,68,14,0);}}
+.pron-feedback{margin:0 20px 4px; border-radius:14px; padding:10px 14px; font-size:13px; line-height:1.4; display:flex; align-items:center; gap:10px;}
+.pron-feedback.good{background:#E7F0EA; color:var(--olive); border:1px solid var(--olive);}
+.pron-feedback.bad{background:#F6E4E1; color:var(--wrong); border:1px solid var(--wrong);}
+.pron-feedback.info{background:var(--surface); color:var(--ink-soft); border:1px solid var(--line);}
+.pron-score{font-family:'IBM Plex Mono',monospace; font-weight:600; flex-shrink:0;}
+.dict-group-title{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin:18px 0 8px;}
+.dict-group-title:first-child{margin-top:0;}
+.word-row{display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:11px 12px; margin-bottom:8px;}
+.word-speak{flex-shrink:0; width:32px; height:32px; border-radius:50%; border:1px solid var(--line); background:var(--bg); color:var(--terracotta); font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+.word-speak:active{transform:scale(0.9);}
+.word-it{font-family:'Fraunces',serif; font-weight:600; color:var(--ink); font-size:15px; flex:1.1; line-height:1.3;}
+.word-arrow{color:var(--line); font-size:13px; flex-shrink:0;}
+.word-sk{font-size:13px; color:var(--ink-soft); flex:1; text-align:right; line-height:1.3;}
+.primary-btn{margin:10px 20px 20px; background:var(--terracotta); color:#fff; border:none; border-radius:14px; padding:15px 0; font-size:15px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; width:calc(100% - 40px);}
+.quiz-q-row{display:flex; align-items:center; gap:10px; margin:6px 20px 16px;}
+.quiz-q{font-family:'Fraunces',serif; font-size:22px; color:var(--ink); font-weight:600; flex:1;}
+.quiz-opts{display:flex; flex-direction:column; gap:10px; padding:0 20px;}
+.quiz-opt{text-align:left; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; font-size:14.5px; color:var(--ink); cursor:pointer; font-family:'Inter',sans-serif; width:100%;}
+.quiz-opt.correct{background:#E7F0EA; border-color:var(--olive); color:var(--olive);}
+.quiz-opt.wrong{background:#F6E4E1; border-color:var(--wrong); color:var(--wrong);}
+.done-wrap{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:28px 20px;}
+.stamp-big{width:110px; height:110px; border-radius:50%; border:3px solid var(--terracotta); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:700; font-size:15px; color:var(--terracotta); transform:rotate(-6deg); text-align:center; padding:10px;}
+.stamp-grid{margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.stamp-slot{aspect-ratio:1; border-radius:18px; border:2px dashed var(--olive); background:#EEF3EF; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; transform:rotate(-2deg);}
+.stamp-slot.empty{border:2px dashed var(--line); background:transparent; transform:none;}
+.stamp-city{font-family:'Fraunces',serif; font-weight:700; color:var(--olive); font-size:14px;}
+.stamp-check{color:var(--olive); font-size:15px;}
+.stamp-locked{color:var(--line); font-family:'IBM Plex Mono',monospace; font-size:20px;}
+.empty-state{margin-top:24px; font-size:13.5px; color:var(--ink-soft); background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px; line-height:1.5;}
+.pill-row{display:flex; gap:10px; padding:0 20px 20px;}
+.pill-btn{flex:1; padding:14px 0; border-radius:14px; font-weight:600; font-size:14px; cursor:pointer; font-family:'Inter',sans-serif;}
+.pill-wrong{border:1px solid var(--wrong); background:#F6E4E1; color:var(--wrong);}
+.pill-right{border:1px solid var(--olive); background:#E7F0EA; color:var(--olive);}
+.bottom-nav{display:flex; border-top:1px solid var(--line); background:var(--surface); padding:8px 4px 14px;}
+.nav-btn{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; color:var(--ink-soft); padding:6px 0; font-family:'Inter',sans-serif;}
+.nav-btn.active{color:var(--terracotta);}
+.nav-icon{font-size:17px;}
+.nav-label{font-size:10px; font-family:'IBM Plex Mono',monospace;}
+.install-hint{max-width:390px; margin-top:14px; text-align:center; font-size:12px; color:var(--ink-soft); font-family:'Inter',sans-serif;}
+::-webkit-scrollbar{width:0;}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen" id="screen"></div>
+  </div>
+</div>
+
+<script>
+/* ============ DÁTA ============ */
+const LESSONS = [
+  { id:"l1", city:"Roma", week:1, title:"Saluti", subtitle:"Pozdravy",
+    vocab:[["Ciao","Ahoj / Čau"],["Buongiorno","Dobré ráno / Dobrý deň"],["Buonasera","Dobrý večer"],["Buonanotte","Dobrú noc"],["Arrivederci","Dovidenia"],["Come stai?","Ako sa máš?"],["Sto bene, grazie","Mám sa dobre, ďakujem"],["Piacere","Teší ma"]],
+    quiz:[{q:"Ciao",opts:["Ahoj","Ďakujem","Prosím","Zbohom"],a:0},{q:"Ako sa povie 'Dobrý večer'?",opts:["Buongiorno","Buonanotte","Buonasera","Ciao"],a:2},{q:"Sto bene, grazie",opts:["Nemám sa dobre","Mám sa dobre, ďakujem","Kde si?","Teší ma"],a:1},{q:"Piacere",opts:["Prosím","Prepáč","Teší ma","Ahoj"],a:2}]},
+  { id:"l2", city:"Torino", week:1, title:"Numeri e giorni", subtitle:"Čísla a dni",
+    vocab:[["Uno, due, tre","Jeden, dva, tri"],["Quattro, cinque, sei","Štyri, päť, šesť"],["Sette, otto, nove, dieci","Sedem, osem, deväť, desať"],["Lunedì","Pondelok"],["Mercoledì","Streda"],["Venerdì","Piatok"],["Sabato","Sobota"],["Domenica","Nedeľa"]],
+    quiz:[{q:"Cinque",opts:["Tri","Päť","Sedem","Desať"],a:1},{q:"Ako sa povie 'pondelok'?",opts:["Domenica","Sabato","Lunedì","Venerdì"],a:2},{q:"Domenica",opts:["Streda","Piatok","Nedeľa","Pondelok"],a:2},{q:"Otto",opts:["Šesť","Osem","Deväť","Dva"],a:1}]},
+  { id:"l3", city:"Genova", week:2, title:"Essere e avere", subtitle:"Byť a mať",
+    vocab:[["Io sono","Ja som"],["Tu sei","Ty si"],["Lui / Lei è","On / Ona je"],["Noi siamo","My sme"],["Voi siete","Vy ste"],["Loro sono","Oni sú"],["Io ho","Ja mám"],["Tu hai","Ty máš"]],
+    quiz:[{q:"Io ___ italiano. (essere)",opts:["sei","sono","è","siamo"],a:1},{q:"Tu ___ ragione. (avere)",opts:["ho","hai","ha","hanno"],a:1},{q:"Noi ___ studenti.",opts:["siamo","sono","sei","siete"],a:0},{q:"Lei ___ un libro.",opts:["ha","hai","ho","hanno"],a:0}]},
+  { id:"l4", city:"Firenze", week:2, title:"La famiglia", subtitle:"Rodina",
+    vocab:[["Madre","Matka"],["Padre","Otec"],["Fratello","Brat"],["Sorella","Sestra"],["Figlio / Figlia","Syn / Dcéra"],["Nonno / Nonna","Starý otec / Stará mama"],["Marito","Manžel"],["Moglie","Manželka"]],
+    quiz:[{q:"Sorella",opts:["Brat","Sestra","Matka","Dcéra"],a:1},{q:"Ako sa povie 'starý otec'?",opts:["Nonna","Padre","Nonno","Fratello"],a:2},{q:"Moglie",opts:["Manžel","Manželka","Syn","Matka"],a:1},{q:"Figlio",opts:["Syn","Dcéra","Brat","Otec"],a:0}]},
+  { id:"l5", city:"Bologna", week:3, title:"Il cibo", subtitle:"Jedlo",
+    vocab:[["Pane","Chlieb"],["Acqua","Voda"],["Vino","Víno"],["Pasta","Cestoviny"],["Formaggio","Syr"],["Caffè","Káva"],["Gelato","Zmrzlina"],["Il conto, per favore","Účet, prosím"]],
+    quiz:[{q:"Formaggio",opts:["Chlieb","Syr","Víno","Voda"],a:1},{q:"Ako sa povie 'zmrzlina'?",opts:["Gelato","Caffè","Pasta","Pane"],a:0},{q:"Il conto, per favore",opts:["Dobrú chuť","Účet, prosím","Som plný","Chutí mi to"],a:1},{q:"Acqua",opts:["Víno","Chlieb","Voda","Káva"],a:2}]},
+  { id:"l6", city:"Venezia", week:3, title:"In città", subtitle:"V meste",
+    vocab:[["La strada","Ulica"],["La piazza","Námestie"],["Il negozio","Obchod"],["La stazione","Stanica"],["La chiesa","Kostol"],["Il mercato","Trh"],["La banca","Banka"],["Dov'è...?","Kde je...?"]],
+    quiz:[{q:"La piazza",opts:["Ulica","Námestie","Stanica","Kostol"],a:1},{q:"Ako sa opýtaš 'Kde je...?'",opts:["Che cos'è?","Dov'è...?","Chi è?","Come si va?"],a:1},{q:"La stazione",opts:["Stanica","Banka","Trh","Obchod"],a:0},{q:"Il negozio",opts:["Kostol","Obchod","Ulica","Trh"],a:1}]},
+  { id:"l7", city:"Napoli", week:4, title:"Colori e aggettivi", subtitle:"Farby a prídavné mená",
+    vocab:[["Rosso","Červený"],["Blu","Modrý"],["Verde","Zelený"],["Giallo","Žltý"],["Grande","Veľký"],["Piccolo","Malý"],["Bello","Krásny"],["Buono","Dobrý"]],
+    quiz:[{q:"Verde",opts:["Modrý","Zelený","Žltý","Červený"],a:1},{q:"Ako sa povie 'malý'?",opts:["Grande","Piccolo","Bello","Buono"],a:1},{q:"Bello",opts:["Dobrý","Škaredý","Krásny","Veľký"],a:2},{q:"Rosso",opts:["Žltý","Modrý","Zelený","Červený"],a:3}]},
+  { id:"l8", city:"Palermo", week:4, title:"Il passato", subtitle:"Minulý čas",
+    vocab:[["Ho mangiato","Jedol/a som"],["Ho bevuto","Pil/a som"],["Sono andato/a","Šiel/šla som"],["Ho visto","Videl/a som"],["Ho fatto","Urobil/a som"],["Ho detto","Povedal/a som"]],
+    quiz:[{q:"Ho mangiato",opts:["Budem jesť","Jedol/a som","Jem","Chcem jesť"],a:1},{q:"Ako sa povie 'videl/a som'?",opts:["Ho visto","Ho fatto","Ho detto","Sono andato"],a:0},{q:"Sono andato/a",opts:["Prišiel/prišla som","Šiel/šla som","Bežím","Pôjdem"],a:1},{q:"Ho detto",opts:["Povedal/a som","Počul/a som","Videl/a som","Dal/a som"],a:0}]},
+  { id:"l9", city:"Milano", week:5, title:"Il futuro", subtitle:"Budúci čas",
+    vocab:[["Andrò","Pôjdem"],["Farò","Urobím"],["Mangerò","Budem jesť"],["Vedrò","Uvidím"],["Sarò","Budem"],["Avrò","Budem mať"]],
+    quiz:[{q:"Andrò",opts:["Šiel som","Idem","Pôjdem","Chodím"],a:2},{q:"Ako sa povie 'budem mať'?",opts:["Sarò","Avrò","Farò","Vedrò"],a:1},{q:"Mangerò",opts:["Budem jesť","Jedol som","Jem","Chcem jesť"],a:0},{q:"Sarò",opts:["Budem mať","Uvidím","Budem","Urobím"],a:2}]},
+  { id:"l10", city:"Verona", week:6, title:"Conversazione", subtitle:"Konverzácia",
+    vocab:[["Come ti chiami?","Ako sa voláš?"],["Mi chiamo...","Volám sa..."],["Di dove sei?","Odkiaľ si?"],["Sono della Slovacchia","Som zo Slovenska"],["Quanti anni hai?","Koľko máš rokov?"],["Mi piace...","Páči sa mi..."],["Che lavoro fai?","Akú prácu robíš?"],["Non capisco","Nerozumiem"]],
+    quiz:[{q:"Come ti chiami?",opts:["Koľko máš rokov?","Ako sa voláš?","Odkiaľ si?","Ako sa máš?"],a:1},{q:"Ako sa povie 'nerozumiem'?",opts:["Non capisco","Non lo so","Non parlo","Non vedo"],a:0},{q:"Mi piace...",opts:["Volám sa...","Chcem...","Páči sa mi...","Poznám..."],a:2},{q:"Di dove sei?",opts:["Kam ideš?","Odkiaľ si?","Kde bývaš?","Kto si?"],a:1}]},
+  { id:"l11", city:"Pisa", week:7, title:"Al ristorante", subtitle:"V reštaurácii (pokročilé)",
+    vocab:[["Vorrei prenotare un tavolo","Chcel by som rezervovať stôl"],["Cosa mi consiglia?","Čo mi odporúčate?"],["Sono allergico/a a...","Som alergický/á na..."],["Il conto separato","Účet zvlášť"],["Era delizioso","Bolo to výborné"],["Ancora un po', per favore","Ešte trochu, prosím"],["Vorrei il menù, per favore","Chcel by som jedálny lístok"],["Senza glutine","Bez lepku"]],
+    quiz:[{q:"Vorrei prenotare un tavolo",opts:["Chcel by som zaplatiť","Chcel by som rezervovať stôl","Chcem objednať jedlo","Chcem zrušiť rezerváciu"],a:1},{q:"Ako sa povie 'Som alergický/á na...'?",opts:["Mi piace...","Sono allergico/a a...","Non mangio...","Vorrei..."],a:1},{q:"Era delizioso",opts:["Bolo to hrozné","Bolo to drahé","Bolo to výborné","Bolo to studené"],a:2},{q:"Senza glutine",opts:["Bez cukru","Bez soli","Bez lepku","Bez mäsa"],a:2}]},
+  { id:"l12", city:"Cagliari", week:7, title:"In viaggio", subtitle:"Na cestách",
+    vocab:[["Il biglietto","Lístok"],["La valigia","Kufor"],["L'aeroporto","Letisko"],["In ritardo","Meškanie"],["Il volo","Let"],["La dogana","Colnica"],["Il passaporto","Pas"],["Buon viaggio!","Šťastnú cestu!"]],
+    quiz:[{q:"La valigia",opts:["Lístok","Kufor","Let","Pas"],a:1},{q:"Ako sa povie 'meškanie'?",opts:["Il volo","In ritardo","La dogana","Il biglietto"],a:1},{q:"L'aeroporto",opts:["Nádražie","Prístav","Letisko","Hranica"],a:2},{q:"Buon viaggio!",opts:["Dobrú chuť!","Šťastnú cestu!","Vitaj!","Dovidenia!"],a:1}]},
+  { id:"l13", city:"Perugia", week:8, title:"Le indicazioni", subtitle:"Orientácia v meste",
+    vocab:[["Gira a destra","Zabočte doprava"],["Gira a sinistra","Zabočte doľava"],["Sempre dritto","Stále rovno"],["Vicino","Blízko"],["Lontano","Ďaleko"],["All'angolo","Na rohu"],["Attraversare la strada","Prejsť cez cestu"],["Il semaforo","Semafor"]],
+    quiz:[{q:"Sempre dritto",opts:["Zabočte doprava","Stále rovno","Choďte späť","Zastavte sa"],a:1},{q:"Ako sa povie 'blízko'?",opts:["Lontano","Vicino","All'angolo","Dritto"],a:1},{q:"Il semaforo",opts:["Križovatka","Chodník","Semafor","Diaľnica"],a:2},{q:"Gira a sinistra",opts:["Zabočte doprava","Zabočte doľava","Choďte rovno","Zastavte"],a:1}]},
+  { id:"l14", city:"Trieste", week:8, title:"Il tempo", subtitle:"Počasie",
+    vocab:[["Fa caldo","Je horúco"],["Fa freddo","Je zima"],["Piove","Prší"],["C'è il sole","Svieti slnko"],["È nuvoloso","Je zamračené"],["Nevica","Sneží"],["Che tempo fa?","Aké je počasie?"],["La previsione del tempo","Predpoveď počasia"]],
+    quiz:[{q:"Piove",opts:["Sneží","Prší","Fúka vietor","Je horúco"],a:1},{q:"Ako sa povie 'je zima'?",opts:["Fa caldo","Fa freddo","Piove","Nevica"],a:1},{q:"Che tempo fa?",opts:["Koľko je hodín?","Aké je počasie?","Kde sme?","Ako sa máš?"],a:1},{q:"C'è il sole",opts:["Je zamračené","Prší","Svieti slnko","Sneží"],a:2}]},
+  { id:"l15", city:"Lecce", week:9, title:"Dal medico", subtitle:"U lekára",
+    vocab:[["Mi fa male qui","Bolí ma tu"],["Ho la febbre","Mám horúčku"],["Il mal di testa","Bolesť hlavy"],["La farmacia","Lekáreň"],["Chiamare un'ambulanza","Zavolať sanitku"],["Mi sento male","Necítim sa dobre"],["Una ricetta medica","Lekársky predpis"],["Sono incinta","Som tehotná"]],
+    quiz:[{q:"Ho la febbre",opts:["Mám kašeľ","Mám horúčku","Mám nádchu","Mám bolesť hlavy"],a:1},{q:"Ako sa povie 'lekáreň'?",opts:["L'ospedale","Il medico","La farmacia","La clinica"],a:2},{q:"Mi sento male",opts:["Cítim sa dobre","Necítim sa dobre","Som unavený","Som hladný"],a:1},{q:"Il mal di testa",opts:["Bolesť brucha","Bolesť chrbta","Bolesť hlavy","Bolesť zubov"],a:2}]},
+  { id:"l16", city:"Parma", week:9, title:"Gli hobby", subtitle:"Záľuby",
+    vocab:[["Mi piace leggere","Rád/rada čítam"],["Fare sport","Športovať"],["Ascoltare musica","Počúvať hudbu"],["Guardare un film","Pozerať film"],["Cucinare","Variť"],["Viaggiare","Cestovať"],["Dipingere","Maľovať"],["Ballare","Tancovať"]],
+    quiz:[{q:"Cucinare",opts:["Tancovať","Variť","Maľovať","Spievať"],a:1},{q:"Ako sa povie 'cestovať'?",opts:["Ballare","Dipingere","Viaggiare","Cucinare"],a:2},{q:"Ascoltare musica",opts:["Hrať hudbu","Počúvať hudbu","Skladať hudbu","Spievať"],a:1},{q:"Mi piace leggere",opts:["Rád varím","Rád čítam","Rád tancujem","Rád cestujem"],a:1}]},
+  { id:"l17", city:"Ravenna", week:10, title:"Al lavoro", subtitle:"V práci",
+    vocab:[["L'ufficio","Kancelária"],["La riunione","Porada"],["Il capo","Šéf"],["Un collega","Kolega"],["Lo stipendio","Plat"],["Essere occupato/a","Byť zaneprázdnený/á"],["Fare gli straordinari","Robiť nadčasy"],["Le ferie","Dovolenka"]],
+    quiz:[{q:"Il capo",opts:["Kolega","Zamestnanec","Šéf","Klient"],a:2},{q:"Ako sa povie 'plat'?",opts:["Le ferie","Lo stipendio","La riunione","L'ufficio"],a:1},{q:"Essere occupato/a",opts:["Byť voľný","Byť zaneprázdnený","Byť chorý","Byť na dovolenke"],a:1},{q:"Le ferie",opts:["Nadčasy","Porada","Dovolenka","Kancelária"],a:2}]},
+  { id:"l18", city:"Catania", week:10, title:"Modali e imperativo", subtitle:"Modálne slovesá a rozkazovací spôsob",
+    vocab:[["Posso...?","Môžem...?"],["Devo...","Musím..."],["Voglio...","Chcem..."],["Vai!","Choď!"],["Fai attenzione!","Daj pozor!"],["Aspetta!","Počkaj!"],["Puoi aiutarmi?","Môžeš mi pomôcť?"],["Non posso","Nemôžem"]],
+    quiz:[{q:"Devo...",opts:["Chcem...","Musím...","Môžem...","Viem..."],a:1},{q:"Ako sa povie 'Počkaj!'?",opts:["Vai!","Aspetta!","Fai attenzione!","Posso?"],a:1},{q:"Puoi aiutarmi?",opts:["Môžem ti pomôcť?","Pomôž mi!","Môžeš mi pomôcť?","Chcem pomoc"],a:2},{q:"Fai attenzione!",opts:["Poď sem!","Daj pozor!","Ponáhľaj sa!","Ukľudni sa!"],a:1}]},
+  { id:"l19", city:"Assisi", week:11, title:"Espressioni idiomatiche", subtitle:"Idiómy",
+    vocab:[["In bocca al lupo!","Veľa šťastia!"],["Che peccato!","Aká škoda!"],["Non vedo l'ora!","Neviem sa dočkať!"],["Costa un occhio della testa","Stojí to majland"],["Prendere in giro","Robiť si srandu"],["Fare due passi","Ísť sa prejsť"],["Rompere il ghiaccio","Prelomiť ľady"],["Essere al verde","Byť bez peňazí"]],
+    quiz:[{q:"In bocca al lupo!",opts:["Dobrú chuť!","Veľa šťastia!","Príjemný deň!","Dobrú noc!"],a:1},{q:"Ako sa povie 'robiť si srandu'?",opts:["Fare due passi","Prendere in giro","Rompere il ghiaccio","Essere al verde"],a:1},{q:"Essere al verde",opts:["Byť zdravý","Byť šťastný","Byť bez peňazí","Byť nervózny"],a:2},{q:"Costa un occhio della testa",opts:["Je to lacné","Stojí to majland","Je to zadarmo","Je to na zľave"],a:1}]},
+  { id:"l20", city:"Siena", week:11, title:"Conversazione avanzata", subtitle:"Vyjadrovanie názoru",
+    vocab:[["Secondo me...","Podľa mňa..."],["Sono d'accordo","Súhlasím"],["Non sono d'accordo","Nesúhlasím"],["Hai ragione","Máš pravdu"],["Forse","Možno"],["Dipende","Závisí to"],["In effetti","Vlastne"],["Comunque","Každopádne"]],
+    quiz:[{q:"Sono d'accordo",opts:["Nesúhlasím","Súhlasím","Neviem","Možno"],a:1},{q:"Ako sa povie 'máš pravdu'?",opts:["Forse","Dipende","Hai ragione","Comunque"],a:2},{q:"Dipende",opts:["Určite","Nikdy","Závisí to","Vždy"],a:2},{q:"Secondo me...",opts:["Podľa teba...","Podľa mňa...","Podľa neho...","Podľa nás..."],a:1}]},
+  { id:"l21", city:"Bari", week:12, title:"La casa", subtitle:"Bývanie",
+    vocab:[["La cucina","Kuchyňa"],["Il soggiorno","Obývačka"],["La camera da letto","Spálňa"],["Il bagno","Kúpeľňa"],["Il balcone","Balkón"],["L'affitto","Nájom"],["Il condominio","Bytový dom"],["Traslocare","Sťahovať sa"]],
+    quiz:[{q:"Il soggiorno",opts:["Kuchyňa","Obývačka","Spálňa","Kúpeľňa"],a:1},{q:"Ako sa povie 'nájom'?",opts:["Il balcone","L'affitto","Il condominio","Traslocare"],a:1},{q:"Traslocare",opts:["Upratovať","Renovovať","Sťahovať sa","Predávať"],a:2},{q:"La camera da letto",opts:["Obývačka","Spálňa","Kuchyňa","Balkón"],a:1}]},
+  { id:"l22", city:"Padova", week:12, title:"I mezzi di trasporto", subtitle:"Doprava",
+    vocab:[["L'autobus","Autobus"],["Il treno","Vlak"],["La metropolitana","Metro"],["La macchina","Auto"],["La bicicletta","Bicykel"],["Prendere un taxi","Vziať si taxík"],["Il biglietto di andata e ritorno","Spiatočný lístok"],["Perdere il treno","Zmeškať vlak"]],
+    quiz:[{q:"La metropolitana",opts:["Autobus","Metro","Vlak","Auto"],a:1},{q:"Ako sa povie 'zmeškať vlak'?",opts:["Prendere il treno","Perdere il treno","Aspettare il treno","Vedere il treno"],a:1},{q:"Il biglietto di andata e ritorno",opts:["Jednosmerný lístok","Mesačný lístok","Spiatočný lístok","Zľavnený lístok"],a:2},{q:"La bicicletta",opts:["Motorka","Bicykel","Kolobežka","Auto"],a:1}]},
+  { id:"l23", city:"Bergamo", week:13, title:"Al supermercato", subtitle:"V supermarkete",
+    vocab:[["Il carrello","Nákupný vozík"],["La cassa","Pokladňa"],["Lo scontrino","Účtenka"],["In offerta","V akcii"],["Il reparto frutta","Oddelenie ovocia"],["I sacchetti","Tašky/sáčky"],["Pagare con carta","Platiť kartou"],["Il resto","Zvyšok/drobné"]],
+    quiz:[{q:"Lo scontrino",opts:["Vozík","Účtenka","Taška","Zľava"],a:1},{q:"Ako sa povie 'v akcii'?",opts:["Il resto","In offerta","La cassa","Il carrello"],a:1},{q:"Il resto",opts:["Zvyšok/drobné","Účtenka","Vozík","Pokladňa"],a:0},{q:"Pagare con carta",opts:["Platiť hotovosťou","Platiť kartou","Platiť šekom","Nezaplatiť"],a:1}]},
+  { id:"l24", city:"Salerno", week:13, title:"Le stagioni e le feste", subtitle:"Ročné obdobia a sviatky",
+    vocab:[["La primavera","Jar"],["L'estate","Leto"],["L'autunno","Jeseň"],["L'inverno","Zima"],["Natale","Vianoce"],["Pasqua","Veľká noc"],["Il compleanno","Narodeniny"],["Festeggiare","Oslavovať"]],
+    quiz:[{q:"L'autunno",opts:["Jar","Leto","Jeseň","Zima"],a:2},{q:"Ako sa povie 'Vianoce'?",opts:["Pasqua","Natale","L'inverno","Il compleanno"],a:1},{q:"Festeggiare",opts:["Pracovať","Oslavovať","Cestovať","Odpočívať"],a:1},{q:"Il compleanno",opts:["Sviatok","Narodeniny","Výročie","Meniny"],a:1}]},
+  { id:"l25", city:"Ferrara", week:14, title:"Il corpo umano", subtitle:"Ľudské telo",
+    vocab:[["La testa","Hlava"],["Le mani","Ruky"],["I piedi","Nohy (chodidlá)"],["La schiena","Chrbát"],["Gli occhi","Oči"],["Il cuore","Srdce"],["Lo stomaco","Žalúdok"],["Le gambe","Nohy (celé)"]],
+    quiz:[{q:"La schiena",opts:["Hlava","Chrbát","Srdce","Žalúdok"],a:1},{q:"Ako sa povie 'oči'?",opts:["Le mani","I piedi","Gli occhi","Le gambe"],a:2},{q:"Il cuore",opts:["Pľúca","Srdce","Pečeň","Mozog"],a:1},{q:"Le mani",opts:["Nohy","Ruky","Prsty na nohách","Ramená"],a:1}]},
+  { id:"l26", city:"Vicenza", week:14, title:"I vestiti", subtitle:"Oblečenie",
+    vocab:[["La maglietta","Tričko"],["I pantaloni","Nohavice"],["Le scarpe","Topánky"],["Il cappotto","Kabát"],["La gonna","Sukňa"],["Il cappello","Klobúk"],["Provare (i vestiti)","Skúšať (oblečenie)"],["La taglia","Veľkosť (oblečenia)"]],
+    quiz:[{q:"Il cappotto",opts:["Sukňa","Kabát","Klobúk","Topánky"],a:1},{q:"Ako sa povie 'veľkosť'?",opts:["La taglia","Provare","La gonna","Il cappello"],a:0},{q:"Le scarpe",opts:["Ponožky","Topánky","Rukavice","Šaty"],a:1},{q:"La maglietta",opts:["Sukňa","Tričko","Kabát","Nohavice"],a:1}]},
+  { id:"l27", city:"Ancona", week:15, title:"Congiuntivo presente", subtitle:"Konjunktív – úvod",
+    vocab:[["Penso che sia...","Myslím, že je..."],["Credo che abbia...","Verím, že má..."],["Spero che tu venga","Dúfam, že prídeš"],["È importante che...","Je dôležité, aby..."],["Bisogna che...","Je potrebné, aby..."],["Voglio che tu faccia...","Chcem, aby si urobil..."],["Non credo che sia vero","Neverím, že je to pravda"],["Può darsi che...","Možno že..."]],
+    quiz:[{q:"Spero che tu venga",opts:["Dúfam, že prídeš","Viem, že prídeš","Chcem, aby si prišiel","Myslím, že prídeš"],a:0},{q:"Ako sa povie 'je potrebné, aby...'?",opts:["È importante che","Penso che","Bisogna che","Può darsi che"],a:2},{q:"Non credo che sia vero",opts:["Verím, že je to pravda","Neverím, že je to pravda","Viem, že je to pravda","Pochybujem, že to vieš"],a:1},{q:"Può darsi che",opts:["Určite že","Nikdy že","Možno že","Vždy že"],a:2}]},
+  { id:"l28", city:"Udine", week:15, title:"Il condizionale", subtitle:"Kondicionál",
+    vocab:[["Vorrei...","Chcel by som..."],["Potrei...","Mohol by som..."],["Dovrei...","Mal by som..."],["Mi piacerebbe...","Páčilo by sa mi..."],["Sarebbe meglio...","Bolo by lepšie..."],["Faresti...?","Urobil by si...?"],["Potresti aiutarmi?","Mohol by si mi pomôcť?"],["Non farei mai questo","Toto by som nikdy neurobil"]],
+    quiz:[{q:"Dovrei...",opts:["Chcel by som...","Mal by som...","Mohol by som...","Urobím..."],a:1},{q:"Ako sa povie 'Mohol by si mi pomôcť?'",opts:["Puoi aiutarmi?","Potresti aiutarmi?","Devi aiutarmi?","Vuoi aiutarmi?"],a:1},{q:"Sarebbe meglio...",opts:["Bude horšie...","Bolo by lepšie...","Je to najlepšie...","Bolo to najhoršie..."],a:1},{q:"Mi piacerebbe...",opts:["Nepáči sa mi...","Páči sa mi...","Páčilo by sa mi...","Nepáčilo by sa mi..."],a:2}]},
+  { id:"l29", city:"Arezzo", week:16, title:"La tecnologia", subtitle:"Technológie",
+    vocab:[["Il computer","Počítač"],["Il cellulare","Mobil"],["La password","Heslo"],["Scaricare","Sťahovať (súbor)"],["Il caricabatterie","Nabíjačka"],["La connessione","Pripojenie"],["L'applicazione","Aplikácia"],["Lo schermo","Obrazovka"]],
+    quiz:[{q:"Scaricare",opts:["Nahrávať","Sťahovať","Mazať","Ukladať"],a:1},{q:"Ako sa povie 'nabíjačka'?",opts:["Lo schermo","Il caricabatterie","La connessione","La password"],a:1},{q:"Lo schermo",opts:["Klávesnica","Myš","Obrazovka","Kábel"],a:2},{q:"La connessione",opts:["Heslo","Aplikácia","Pripojenie","Sťahovanie"],a:2}]},
+  { id:"l30", city:"Pescara", week:16, title:"In banca", subtitle:"V banke",
+    vocab:[["Il conto corrente","Bežný účet"],["Il bancomat","Bankomat"],["Prelevare","Vybrať (peniaze)"],["Depositare","Vložiť (peniaze)"],["Il bonifico","Bankový prevod"],["La carta di credito","Kreditná karta"],["Il prestito","Pôžička"],["Il saldo","Zostatok"]],
+    quiz:[{q:"Prelevare",opts:["Vložiť","Vybrať","Previesť","Požičať"],a:1},{q:"Ako sa povie 'zostatok'?",opts:["Il prestito","Il bonifico","Il saldo","Il bancomat"],a:2},{q:"Il bonifico",opts:["Bankomat","Bankový prevod","Pôžička","Účet"],a:1},{q:"Il conto corrente",opts:["Sporiaci účet","Bežný účet","Kreditná karta","Pôžička"],a:1}]},
+  { id:"l31", city:"Como", week:17, title:"All'aeroporto in dettaglio", subtitle:"Na letisku detailne",
+    vocab:[["L'imbarco","Nástup do lietadla"],["Il gate","Odletová brána"],["Il bagaglio a mano","Príručná batožina"],["Il check-in","Odbavenie"],["La carta d'imbarco","Palubná vstupenka"],["La sala d'attesa","Čakáreň"],["Decollare","Vzlietnuť"],["Atterrare","Pristáť"]],
+    quiz:[{q:"Decollare",opts:["Pristáť","Vzlietnuť","Meškať","Zrušiť let"],a:1},{q:"Ako sa povie 'príručná batožina'?",opts:["Il check-in","Il bagaglio a mano","La carta d'imbarco","Il gate"],a:1},{q:"Atterrare",opts:["Vzlietnuť","Pristáť","Odletieť","Čakať"],a:1},{q:"La carta d'imbarco",opts:["Pas","Palubná vstupenka","Lístok na vlak","Colný formulár"],a:1}]},
+  { id:"l32", city:"Lucca", week:17, title:"Le relazioni", subtitle:"Vzťahy",
+    vocab:[["Fidanzato/a","Priateľ/priateľka (partner)"],["Sposarsi","Zosobášiť sa"],["Innamorarsi","Zamilovať sa"],["L'amicizia","Priateľstvo"],["Litigare","Hádať sa"],["Fare pace","Uzmieriť sa"],["La coppia","Pár"],["L'anniversario","Výročie"]],
+    quiz:[{q:"Litigare",opts:["Milovať sa","Hádať sa","Zosobášiť sa","Uzmieriť sa"],a:1},{q:"Ako sa povie 'zamilovať sa'?",opts:["Sposarsi","Innamorarsi","Litigare","Fare pace"],a:1},{q:"L'anniversario",opts:["Narodeniny","Sviatok","Výročie","Rozchod"],a:2},{q:"La coppia",opts:["Rodina","Pár","Priateľstvo","Manželstvo"],a:1}]},
+  { id:"l33", city:"Matera", week:18, title:"Il cinema e la TV", subtitle:"Kino a televízia",
+    vocab:[["Il film","Film"],["L'attore / L'attrice","Herec / herečka"],["La trama","Dej"],["Il regista","Režisér"],["Doppiato","Dabovaný"],["I sottotitoli","Titulky"],["La serie TV","Seriál"],["Il biglietto del cinema","Lístok do kina"]],
+    quiz:[{q:"I sottotitoli",opts:["Dabing","Titulky","Dej","Réžia"],a:1},{q:"Ako sa povie 'režisér'?",opts:["L'attore","Il regista","La trama","Doppiato"],a:1},{q:"Doppiato",opts:["Titulkovaný","Dabovaný","Originálny","Strihaný"],a:1},{q:"La trama",opts:["Herec","Dej","Kino","Lístok"],a:1}]},
+  { id:"l34", city:"Taormina", week:18, title:"La scuola e l'università", subtitle:"Škola a univerzita",
+    vocab:[["La lezione","Vyučovacia hodina"],["L'esame","Skúška"],["I compiti","Domáce úlohy"],["Il professore","Profesor"],["La laurea","Vysokoškolský diplom"],["La borsa di studio","Štipendium"],["L'aula","Trieda / učebňa"],["Bocciare","Prepadnúť (na skúške)"]],
+    quiz:[{q:"L'esame",opts:["Hodina","Skúška","Úloha","Prestávka"],a:1},{q:"Ako sa povie 'štipendium'?",opts:["La laurea","La borsa di studio","L'aula","I compiti"],a:1},{q:"Bocciare",opts:["Uspieť","Prepadnúť","Zapísať sa","Ukončiť"],a:1},{q:"La laurea",opts:["Stredoškolský diplom","Vysokoškolský diplom","Vysvedčenie","Certifikát"],a:1}]},
+  { id:"l35", city:"Rimini", week:19, title:"Verbi riflessivi e preposizioni", subtitle:"Zvratné slovesá a predložky",
+    vocab:[["Svegliarsi","Zobudiť sa"],["Lavarsi","Umyť sa"],["Vestirsi","Obliecť sa"],["Alzarsi","Vstať"],["Addormentarsi","Zaspať"],["Prendersi cura di","Starať sa o"],["Davanti a","Pred"],["Dietro a","Za"]],
+    quiz:[{q:"Svegliarsi",opts:["Zaspať","Zobudiť sa","Vstať","Umyť sa"],a:1},{q:"Ako sa povie 'pred'?",opts:["Dietro a","Davanti a","Vicino a","Lontano da"],a:1},{q:"Prendersi cura di",opts:["Starať sa o","Zabudnúť na","Báť sa","Myslieť na"],a:0},{q:"Addormentarsi",opts:["Zobudiť sa","Zaspať","Vstať","Obliecť sa"],a:1}]},
+  { id:"l36", city:"Mantova", week:19, title:"L'ambiente e la natura", subtitle:"Príroda a životné prostredie",
+    vocab:[["La montagna","Hora"],["Il mare","More"],["La foresta","Les"],["L'inquinamento","Znečistenie"],["Riciclare","Recyklovať"],["Sostenibile","Udržateľný"],["Il clima","Klíma"],["Proteggere","Chrániť"]],
+    quiz:[{q:"L'inquinamento",opts:["Recyklácia","Znečistenie","Ochrana","Príroda"],a:1},{q:"Ako sa povie 'recyklovať'?",opts:["Proteggere","Riciclare","Inquinare","Sostenere"],a:1},{q:"Sostenibile",opts:["Škodlivý","Udržateľný","Drahý","Vzácny"],a:1},{q:"La foresta",opts:["More","Hora","Les","Pole"],a:2}]},
+  { id:"l37", city:"Urbino", week:20, title:"La musica e l'arte", subtitle:"Hudba a umenie",
+    vocab:[["Il quadro","Obraz"],["Il museo","Múzeum"],["La mostra","Výstava"],["Il concerto","Koncert"],["Suonare uno strumento","Hrať na nástroj"],["La canzone","Pieseň"],["L'artista","Umelec"],["La scultura","Socha"]],
+    quiz:[{q:"La mostra",opts:["Múzeum","Výstava","Koncert","Galéria"],a:1},{q:"Ako sa povie 'socha'?",opts:["Il quadro","La scultura","Il museo","La canzone"],a:1},{q:"Suonare uno strumento",opts:["Spievať pieseň","Hrať na nástroj","Maľovať obraz","Písať knihu"],a:1},{q:"Il quadro",opts:["Socha","Obraz","Fotografia","Kresba"],a:1}]},
+  { id:"l38", city:"Positano", week:20, title:"Il passato remoto e i racconti", subtitle:"Rozprávanie príbehov",
+    vocab:[["C'era una volta...","Kedysi dávno..."],["Un giorno...","Jedného dňa..."],["Alla fine...","Nakoniec..."],["Improvvisamente...","Zrazu..."],["Raccontare una storia","Rozprávať príbeh"],["La fiaba","Rozprávka"],["Il protagonista","Hlavná postava"],["Accadde","Stalo sa"]],
+    quiz:[{q:"C'era una volta...",opts:["Jedného dňa...","Kedysi dávno...","Nakoniec...","Zrazu..."],a:1},{q:"Ako sa povie 'zrazu'?",opts:["Alla fine","Un giorno","Improvvisamente","Accadde"],a:2},{q:"La fiaba",opts:["Príbeh","Rozprávka","Legenda","Bájka"],a:1},{q:"Il protagonista",opts:["Autor","Hlavná postava","Vedľajšia postava","Rozprávač"],a:1}]},
+  { id:"l39", city:"Sorrento", week:21, title:"Proverbi e modi di dire", subtitle:"Príslovia a porekadlá",
+    vocab:[["Chi dorme non piglia pesci","Kto skoro vstáva, tomu Boh dáva"],["Meglio tardi che mai","Lepšie neskoro ako nikdy"],["Tutto è bene quel che finisce bene","Všetko dobre dopadne"],["Non è tutto oro quel che luccica","Nie je všetko zlato, čo sa blyští"],["L'unione fa la forza","V jednote je sila"],["Chi trova un amico trova un tesoro","Kto nájde priateľa, nájde poklad"],["Chi cerca trova","Kto hľadá, nájde"],["Ride bene chi ride ultimo","Kto sa smeje naposledy, ten sa smeje najlepšie"]],
+    quiz:[{q:"Meglio tardi che mai",opts:["Lepšie nikdy ako neskoro","Lepšie neskoro ako nikdy","Vždy načas","Nikdy nie je neskoro"],a:1},{q:"Ako sa povie 'V jednote je sila'?",opts:["Chi cerca trova","L'unione fa la forza","Chi dorme non piglia pesci","Ride bene chi ride ultimo"],a:1},{q:"Non è tutto oro quel che luccica",opts:["Všetko čo sa blyští je zlato","Nie je všetko zlato, čo sa blyští","Zlato sa vždy blyští","Striebro je cennejšie"],a:1},{q:"Chi trova un amico trova un tesoro",opts:["Kto hľadá poklad, nájde priateľa","Kto nájde priateľa, nájde poklad","Priatelia sú ako poklady","Poklad je vzácnejší ako priateľ"],a:1}]},
+  { id:"l40", city:"Bolzano", week:21, title:"Conversazione fluente", subtitle:"Záverečné opakovanie",
+    vocab:[["Ad ogni modo...","Každopádne..."],["Per quanto riguarda...","Čo sa týka..."],["D'altra parte...","Na druhej strane..."],["Innanzitutto...","Predovšetkým..."],["Infine...","Nakoniec..."],["A proposito...","Mimochodom..."],["Cioè...","Teda / to znamená..."],["Insomma...","Skrátka a dobre..."]],
+    quiz:[{q:"D'altra parte",opts:["Predovšetkým","Na druhej strane","Nakoniec","Mimochodom"],a:1},{q:"Ako sa povie 'mimochodom'?",opts:["Cioè","Insomma","A proposito","Infine"],a:2},{q:"Per quanto riguarda",opts:["Čo sa týka","Napriek tomu","Preto","Okrem toho"],a:0},{q:"Innanzitutto",opts:["Nakoniec","Predovšetkým","Mimochodom","Skrátka"],a:1}]},
+];
+const TOTAL = LESSONS.length;
+const STORAGE_KEY = "italiano-progress-v1";
+
+/* ============ VÝSLOVNOSŤ ============ */
+let cachedItalianVoice = null;
+function primeVoices(){
+  if(!window.speechSynthesis) return;
+  const pick = () => {
+    const voices = window.speechSynthesis.getVoices();
+    cachedItalianVoice = voices.find(v=>v.lang && v.lang.toLowerCase()==="it-it") ||
+                          voices.find(v=>v.lang && v.lang.toLowerCase().startsWith("it")) || null;
+  };
+  pick();
+  window.speechSynthesis.onvoiceschanged = pick;
+}
+function speakItalian(text){
+  try{
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang="it-IT"; u.rate=0.85; u.pitch=1;
+    if(cachedItalianVoice) u.voice = cachedItalianVoice;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ============ KONTROLA VÝSLOVNOSTI (Speech Recognition) ============ */
+const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+let recognizer = null;
+let isListening = false;
+
+function normalizeForCompare(s){
+  return s.toLowerCase()
+    .replace(/[.,!?…'’()]/g,"")
+    .replace(/à/g,"a").replace(/è|é/g,"e").replace(/ì/g,"i").replace(/ò/g,"o").replace(/ù/g,"u")
+    .replace(/\s+/g," ")
+    .trim();
+}
+function levenshtein(a,b){
+  const m=a.length, n=b.length;
+  const dp = Array.from({length:m+1},()=>new Array(n+1).fill(0));
+  for(let i=0;i<=m;i++) dp[i][0]=i;
+  for(let j=0;j<=n;j++) dp[0][j]=j;
+  for(let i=1;i<=m;i++){
+    for(let j=1;j<=n;j++){
+      dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j-1],dp[i-1][j],dp[i][j-1]);
+    }
+  }
+  return dp[m][n];
+}
+function similarityScore(target, heard){
+  const t = normalizeForCompare(target);
+  const h = normalizeForCompare(heard);
+  if(!t.length) return 0;
+  const dist = levenshtein(t,h);
+  const score = Math.max(0, 1 - dist / Math.max(t.length, h.length, 1));
+  return Math.round(score*100);
+}
+
+function startPronunciationCheck(targetText){
+  if(!SpeechRecognitionCtor){
+    state.pronFeedback = { kind:"info", text:"Rozpoznávanie reči nie je v tomto prehliadači podporované. Skús to v Chrome, alebo priamo v Safari (nie v móde 'Pridané na plochu')." };
+    render();
+    return;
+  }
+  if(isListening) return;
+  try{
+    recognizer = new SpeechRecognitionCtor();
+    recognizer.lang = "it-IT";
+    recognizer.interimResults = false;
+    recognizer.maxAlternatives = 1;
+
+    isListening = true;
+    state.pronFeedback = null;
+    render();
+
+    recognizer.onresult = (event) => {
+      const heard = event.results[0][0].transcript;
+      const score = similarityScore(targetText, heard);
+      if(score >= 75){
+        state.pronFeedback = { kind:"good", text:`Počul som: „${heard}"`, score };
+      } else {
+        state.pronFeedback = { kind:"bad", text:`Počul som: „${heard}" — skús to znova`, score };
+      }
+      isListening = false;
+      render();
+    };
+    recognizer.onerror = (event) => {
+      isListening = false;
+      let msg = "Nepodarilo sa rozpoznať reč. Skús to znova.";
+      if(event.error === "not-allowed" || event.error === "service-not-allowed"){
+        msg = "Appka nemá povolenie na mikrofón. Povoľ ho v nastaveniach prehliadača a skús znova.";
+      } else if(event.error === "no-speech"){
+        msg = "Nič som nepočul. Skús hovoriť hlasnejšie a bližšie k telefónu.";
+      }
+      state.pronFeedback = { kind:"bad", text:msg };
+      render();
+    };
+    recognizer.onend = () => {
+      isListening = false;
+      render();
+    };
+    recognizer.start();
+  }catch(e){
+    isListening = false;
+    state.pronFeedback = { kind:"info", text:"Rozpoznávanie reči sa nepodarilo spustiť na tomto zariadení." };
+    render();
+  }
+}
+
+/* ============ STAV ============ */
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return { completed:{}, streak:1, known:{} };
+}
+function saveProgress(p){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch(e){}
+}
+let state = {
+  tab:"home",
+  progress: loadProgress(),
+  activeLesson: null,
+  lessonPhase:"cards", cardIdx:0, flipped:false,
+  quizIdx:0, quizSelected:null, quizCorrect:0,
+  praticaOrder:null, praticaPos:0, praticaFlipped:false,
+  pronFeedback:null,
+};
+
+function esc(s){ const d=document.createElement("div"); d.innerText=s; return d.innerHTML; }
+
+/* ============ RENDER ============ */
+function render(){
+  const screen = document.getElementById("screen");
+  if(state.activeLesson){
+    screen.innerHTML = renderLesson();
+  } else {
+    screen.innerHTML = `<div class="content" id="content">${renderTab()}</div>${renderNav()}`;
+  }
+  attachHandlers();
+}
+
+function renderNav(){
+  const items=[["home","⌂","Home"],["lezioni","▤","Lezioni"],["pratica","◐","Pratica"],["slovnik","≡","Slovník"],["passaporto","▣","Passaporto"]];
+  return `<div class="bottom-nav">${items.map(([id,icon,label])=>`
+    <button class="nav-btn ${state.tab===id?'active':''}" data-nav="${id}">
+      <div class="nav-icon">${icon}</div><div class="nav-label">${label}</div>
+    </button>`).join("")}</div>`;
+}
+
+function renderTab(){
+  if(state.tab==="home") return renderHome();
+  if(state.tab==="lezioni") return renderLezioni();
+  if(state.tab==="pratica") return renderPratica();
+  if(state.tab==="slovnik") return renderSlovnik();
+  if(state.tab==="passaporto") return renderPassaporto();
+  return "";
+}
+
+function renderHome(){
+  const completedCount = Object.keys(state.progress.completed).length;
+  const pct = Math.round((completedCount/TOTAL)*100);
+  const next = LESSONS.find(l=>!state.progress.completed[l.id]) || LESSONS[LESSONS.length-1];
+  return `
+  <div class="pad">
+    <div class="row-between">
+      <div><div class="eyebrow">Il tuo viaggio</div><h1 class="title">Buongiorno</h1></div>
+      <div class="streak-badge">🔥<span class="mono" style="font-size:15px">${state.progress.streak}</span></div>
+    </div>
+    <div class="progress-card">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="mono">${completedCount}/${TOTAL} lezioni</span>
+        <span class="mono" style="color:var(--terracotta)">${pct}%</span>
+      </div>
+      <div class="track-bg"><div class="track-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="eyebrow" style="margin-top:18px">Prossima tappa</div>
+    <button class="lesson-hero" data-open-lesson="${next.id}">
+      <div class="city-stamp-sm">${next.city}</div>
+      <div style="flex:1;text-align:left">
+        <div class="lesson-hero-title">${next.title}</div>
+        <div class="lesson-hero-sub">${next.subtitle}</div>
+      </div>
+      <div class="arrow">→</div>
+    </button>
+    <div class="eyebrow" style="margin-top:22px">Perché funziona</div>
+    <div class="tip-row">
+      <div class="tip-card"><div class="tip-n">01</div><div class="tip-text">15 minúť denne stačí — krátke lekcie, opakovanie kartičiek.</div></div>
+      <div class="tip-card"><div class="tip-n">02</div><div class="tip-text">Každá dokončená lekcia = pečiatka do pasu. Zbieraj mestá.</div></div>
+    </div>
+  </div>`;
+}
+
+function renderLezioni(){
+  return `
+  <div class="pad">
+    <div class="eyebrow">Percorso completo</div>
+    <h1 class="title">Lezioni</h1>
+    <div class="lesson-list">
+      ${LESSONS.map((l,i)=>{
+        const done = !!state.progress.completed[l.id];
+        return `<button class="lesson-row" data-open-lesson="${l.id}">
+          <div class="lesson-row-num ${done?'done':''}">${done?'✓':i+1}</div>
+          <div style="flex:1;text-align:left">
+            <div class="lesson-row-title">${l.title}</div>
+            <div class="lesson-row-sub">${l.subtitle} · ${l.city}</div>
+          </div>
+          <div class="lesson-row-week">SETT. ${l.week}</div>
+        </button>`;
+      }).join("")}
+    </div>
+  </div>`;
+}
+
+function renderPratica(){
+  const allWords = LESSONS.filter(l=>state.progress.completed[l.id]).flatMap(l=>l.vocab);
+  if(!allWords.length){
+    return `<div class="pad">
+      <div class="eyebrow">Ripasso</div><h1 class="title">Pratica</h1>
+      <div class="empty-state">Dokonči aspoň jednu lekciu, aby si tu mal slovíčka na precvičovanie.</div>
+    </div>`;
+  }
+  if(!state.praticaOrder){
+    state.praticaOrder = [...allWords].sort(()=>Math.random()-0.5);
+    state.praticaPos = 0;
+  }
+  const word = state.praticaOrder[state.praticaPos % state.praticaOrder.length];
+  return `
+  <div class="pad" style="display:flex;flex-direction:column;height:100%">
+    <div class="eyebrow">Ripasso · ${allWords.length} slov</div>
+    <h1 class="title">Pratica</h1>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <div class="flash-wrap">
+        <div class="flash-card">
+          <button class="speak-btn" data-speak="${esc(word[0])}">🔊</button>
+          <button class="mic-btn ${isListening?'listening':''}" data-mic="${esc(word[0])}">🎤</button>
+          <div class="flash-label">ITALIANO</div>
+          <div class="flash-word">${esc(word[0])}</div>
+          <div class="flash-divider"></div>
+          <div class="flash-translation">${esc(word[1])}</div>
+          <div class="flash-hint">🔊 výslovnosť · 🎤 skús povedať nahlas</div>
+        </div>
+      </div>
+      ${state.pronFeedback ? `<div class="pron-feedback ${state.pronFeedback.kind}">
+        ${typeof state.pronFeedback.score==="number" ? `<div class="pron-score">${state.pronFeedback.score}%</div>` : ""}
+        <div>${esc(state.pronFeedback.text)}</div>
+      </div>` : ""}
+    </div>
+  </div>
+  <div class="pill-row">
+    <button class="pill-btn pill-wrong" data-pratica-mark="0">Neviem</button>
+    <button class="pill-btn pill-right" data-pratica-mark="1">Viem</button>
+  </div>`;
+}
+
+function renderSlovnik(){
+  const doneLessons = LESSONS.filter(l=>state.progress.completed[l.id]);
+  const totalWords = doneLessons.reduce((n,l)=>n+l.vocab.length,0);
+  if(!doneLessons.length){
+    return `<div class="pad">
+      <div class="eyebrow">Repertorio</div><h1 class="title">Slovník</h1>
+      <div class="empty-state">Dokonči aspoň jednu lekciu a všetky jej slovíčka sa tu objavia na opakovanie.</div>
+    </div>`;
+  }
+  return `
+  <div class="pad">
+    <div class="eyebrow">${totalWords} slov · ${doneLessons.length} lezioni</div>
+    <h1 class="title">Slovník</h1>
+    <div style="margin-top:14px">
+      ${doneLessons.map(l=>`
+        <div class="dict-group-title">${esc(l.title)} · ${esc(l.city)}</div>
+        ${l.vocab.map(v=>`
+          <div class="word-row">
+            <button class="word-speak" data-speak="${esc(v[0])}">🔊</button>
+            <div class="word-it">${esc(v[0])}</div>
+            <div class="word-arrow">→</div>
+            <div class="word-sk">${esc(v[1])}</div>
+          </div>
+        `).join("")}
+      `).join("")}
+    </div>
+  </div>`;
+}
+
+function renderPassaporto(){
+  const completedCount = Object.keys(state.progress.completed).length;
+  return `
+  <div class="pad">
+    <div class="eyebrow">${completedCount}/${TOTAL} pečiatok</div>
+    <h1 class="title">Passaporto</h1>
+    <div class="stamp-grid">
+      ${LESSONS.map(l=>{
+        const done = !!state.progress.completed[l.id];
+        return `<div class="stamp-slot ${done?'':'empty'}">
+          ${done ? `<div class="stamp-city">${l.city}</div><div class="stamp-check">✓</div>` : `<div class="stamp-locked">?</div>`}
+        </div>`;
+      }).join("")}
+    </div>
+    ${completedCount===TOTAL ? `<div class="empty-state">🎉 Hai completato tutto il percorso base. Complimenti!</div>` : ""}
+  </div>`;
+}
+
+function renderLesson(){
+  const lesson = state.activeLesson;
+  let inner = "";
+  if(state.lessonPhase==="cards"){
+    const v = lesson.vocab[state.cardIdx];
+    inner = `
+    <div class="content" style="justify-content:space-between">
+      <div>
+        <div class="dots">${lesson.vocab.map((_,i)=>`<div class="dot ${i<=state.cardIdx?'active':''}"></div>`).join("")}</div>
+        <div class="flash-wrap">
+          <div class="flash-card">
+            <button class="speak-btn" data-speak="${esc(v[0])}">🔊</button>
+            <button class="mic-btn ${isListening?'listening':''}" data-mic="${esc(v[0])}">🎤</button>
+            <div class="flash-label">ITALIANO</div>
+            <div class="flash-word">${esc(v[0])}</div>
+            <div class="flash-divider"></div>
+            <div class="flash-translation">${esc(v[1])}</div>
+            <div class="flash-hint">🔊 výslovnosť · 🎤 skús povedať nahlas</div>
+          </div>
+        </div>
+        ${state.pronFeedback ? `<div class="pron-feedback ${state.pronFeedback.kind}">
+          ${typeof state.pronFeedback.score==="number" ? `<div class="pron-score">${state.pronFeedback.score}%</div>` : ""}
+          <div>${esc(state.pronFeedback.text)}</div>
+        </div>` : ""}
+      </div>
+      <button class="primary-btn" data-next-card="1">${state.cardIdx<lesson.vocab.length-1?'Ďalšie slovo':'Prejsť na kvíz'}</button>
+    </div>`;
+  } else if(state.lessonPhase==="quiz"){
+    const q = lesson.quiz[state.quizIdx];
+    inner = `
+    <div class="content">
+      <div class="dots">${lesson.quiz.map((_,i)=>`<div class="dot ${i<=state.quizIdx?'active':''}"></div>`).join("")}</div>
+      <div class="eyebrow" style="margin:14px 20px 0">Ako sa povie po slovensky:</div>
+      <div class="quiz-q-row">
+        <div class="quiz-q">${esc(q.q)}</div>
+        <button class="speak-btn on-light" data-speak="${esc(q.q)}">🔊</button>
+      </div>
+      <div class="quiz-opts">
+        ${q.opts.map((opt,i)=>{
+          let cls="quiz-opt";
+          if(state.quizSelected!==null){
+            if(i===q.a) cls+=" correct";
+            else if(i===state.quizSelected) cls+=" wrong";
+          }
+          return `<button class="${cls}" data-quiz-opt="${i}">${esc(opt)}</button>`;
+        }).join("")}
+      </div>
+    </div>`;
+  } else {
+    inner = `
+    <div class="done-wrap">
+      <div class="stamp-big">${lesson.city}</div>
+      <h1 class="title" style="margin-top:18px">Lezione completata!</h1>
+      <div class="mono">${state.quizCorrect}/${lesson.quiz.length} správne</div>
+      <button class="primary-btn" style="margin-top:26px;width:100%" data-finish-lesson="1">Získať pečiatku</button>
+    </div>`;
+  }
+  return `
+  <div style="display:flex;flex-direction:column;height:100%">
+    <div class="lesson-topbar">
+      <button class="exit-btn" data-exit-lesson="1">✕</button>
+      <div class="lesson-topbar-title">${lesson.title}</div>
+      <div style="width:30px"></div>
+    </div>
+    ${inner}
+  </div>`;
+}
+
+/* ============ EVENTY ============ */
+function attachHandlers(){
+  document.querySelectorAll("[data-nav]").forEach(el=>{
+    el.onclick = ()=>{ state.tab = el.getAttribute("data-nav"); state.pronFeedback=null; render(); };
+  });
+  document.querySelectorAll("[data-open-lesson]").forEach(el=>{
+    el.onclick = ()=>{
+      const id = el.getAttribute("data-open-lesson");
+      state.activeLesson = LESSONS.find(l=>l.id===id);
+      state.lessonPhase="cards"; state.cardIdx=0; state.flipped=false; state.pronFeedback=null;
+      state.quizIdx=0; state.quizSelected=null; state.quizCorrect=0;
+      render();
+    };
+  });
+  const exitBtn = document.querySelector("[data-exit-lesson]");
+  if(exitBtn) exitBtn.onclick = ()=>{ state.activeLesson=null; render(); };
+
+  const nextCard = document.querySelector("[data-next-card]");
+  if(nextCard) nextCard.onclick = ()=>{
+    const lesson = state.activeLesson;
+    state.pronFeedback = null;
+    if(state.cardIdx < lesson.vocab.length-1){ state.cardIdx++; state.flipped=false; }
+    else { state.lessonPhase="quiz"; }
+    render();
+  };
+
+  document.querySelectorAll("[data-quiz-opt]").forEach(el=>{
+    el.onclick = ()=>{
+      if(state.quizSelected!==null) return;
+      const i = parseInt(el.getAttribute("data-quiz-opt"),10);
+      const lesson = state.activeLesson;
+      const q = lesson.quiz[state.quizIdx];
+      state.quizSelected = i;
+      if(i===q.a) state.quizCorrect++;
+      render();
+      setTimeout(()=>{
+        if(state.quizIdx < lesson.quiz.length-1){ state.quizIdx++; state.quizSelected=null; }
+        else { state.lessonPhase="done"; }
+        render();
+      }, 700);
+    };
+  });
+
+  const finishBtn = document.querySelector("[data-finish-lesson]");
+  if(finishBtn) finishBtn.onclick = ()=>{
+    const lesson = state.activeLesson;
+    state.progress.completed[lesson.id] = { correctCount:state.quizCorrect, totalQ:lesson.quiz.length, at:Date.now() };
+    saveProgress(state.progress);
+    state.activeLesson = null;
+    state.tab = "passaporto";
+    render();
+  };
+
+  document.querySelectorAll("[data-pratica-mark]").forEach(el=>{
+    el.onclick = ()=>{
+      const known = el.getAttribute("data-pratica-mark")==="1";
+      const word = state.praticaOrder[state.praticaPos % state.praticaOrder.length];
+      state.progress.known[word[0]] = known;
+      saveProgress(state.progress);
+      state.praticaFlipped=false;
+      state.pronFeedback=null;
+      state.praticaPos++;
+      render();
+    };
+  });
+
+  document.querySelectorAll("[data-mic]").forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      startPronunciationCheck(el.getAttribute("data-mic"));
+    };
+  });
+
+  document.querySelectorAll("[data-speak]").forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      speakItalian(el.getAttribute("data-speak"));
+      el.style.transform="scale(0.9)";
+      setTimeout(()=>{ el.style.transform="scale(1)"; }, 250);
+    };
+  });
+}
+
+primeVoices();
+render();
+</script>
+</body>
+</html>
